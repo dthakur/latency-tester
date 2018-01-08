@@ -1,15 +1,39 @@
 const qrcode = require('qrcode');
 const leftPad = require('left-pad');
+const Jimp = require('jimp');
 
-const FPS = 30;
+const FPS = 60;
 const SECONDS = 60;
-const PADDING_FOR_NAME = 6;
+const PADDING_FOR_NAME = 7;
 
-let i = 0;
+async function addCaption(fileName, name) {
+  const font = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK);
+  const image = await Jimp.read(fileName);
 
-while (i < FPS * SECONDS) {
-  const name = leftPad(i, PADDING_FOR_NAME, 0);
-  qrcode.toFile(`output/${name}.png`, name, {scale: 8});
+  const frame = parseInt(name, 10);
+  const time = (frame / 60.0).toFixed(3);
 
-  i = i + 1;
+  await image.print(font, 2, 2, `${name}         ${time}`);
+  await image.write(fileName);
 }
+
+function main() {
+  let i = 0;
+
+  while (i < FPS * SECONDS) {
+    const name = leftPad(i, PADDING_FOR_NAME, 0);
+    const fileName = `output/${name}.png`;
+    qrcode.toFile(fileName, name, {scale: 16}, err => {
+      if (err) {
+        throw Error(err);
+      }
+
+      // lazyboy
+      addCaption(fileName, name);
+    });
+
+    i = i + 1;
+  }
+}
+
+main();
