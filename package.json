@@ -1,0 +1,15 @@
+{
+  "name": "latency-tester",
+  "version": "1.0.0",
+  "description": "",
+  "main": "generate-images.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "left-pad": "1.2.0",
+    "qrcode": "1.2.0"
+  }
+}
