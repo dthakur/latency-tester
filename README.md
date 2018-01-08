@@ -13,6 +13,8 @@ Measure end-to-end latency of RC VTXs, analog to digital video converters etc
 
 ### Video generation
 
+This is not needed if you use the pre-generated video `sync.mp4`.
+
 1. Use `generate-images.js` to create the raw pngs
 2. Run the command `ffmpeg -r 60 -s 1024x768 -i output/%07d.png -vcodec libx264 -crf 25 -pix_fmt yuv420p sync.mp4` to generate video
 
