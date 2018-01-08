@@ -1,24 +1,28 @@
 const qrcode = require('qrcode');
 const leftPad = require('left-pad');
+const logger = require('winston');
 const Jimp = require('jimp');
 
 const FPS = 60;
 const SECONDS = 60;
 const PADDING_FOR_NAME = 7;
 
-async function addCaption(fileName, name) {
-  const font = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK);
+async function addCaption(font, fileName, name) {
   const image = await Jimp.read(fileName);
 
   const frame = parseInt(name, 10);
-  const time = (frame / 60.0).toFixed(3);
+  const time = (frame / (FPS * 1.0)).toFixed(3);
 
-  await image.print(font, 2, 2, `${name}         ${time}`);
+  await image.print(font, 10, 2, `${name}         ${time}`);
   await image.write(fileName);
+
+  logger.info(`added caption to ${fileName}`);
 }
 
-function main() {
+async function main() {
   let i = 0;
+
+  const font = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK);
 
   while (i < FPS * SECONDS) {
     const name = leftPad(i, PADDING_FOR_NAME, 0);
@@ -28,8 +32,8 @@ function main() {
         throw Error(err);
       }
 
-      // lazyboy
-      addCaption(fileName, name);
+      logger.info(`wrote ${fileName}`);
+      addCaption(font, fileName, name);
     });
 
     i = i + 1;
