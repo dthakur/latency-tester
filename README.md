@@ -22,3 +22,7 @@ Notes:
 
 * Generation is for 60 fps, which means the lowest latency measurement will be ~17ms.
 * Code is not optimized, takes a while
+
+### Analysis
+
+TODO
